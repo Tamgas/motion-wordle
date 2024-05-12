@@ -1,5 +1,5 @@
 body {
-    background: black;
+    background: rgb(22, 21, 21);
 }
 .play {
     text-align: center;
@@ -11,14 +11,16 @@ body {
 .play-row-inputs input {
     border: 2px solid darkgrey;
     border-radius: 10px;
-    width: 30px;
-    height: 30px;
-    margin: 2px;background: rgb(197, 196, 196);
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+    background: rgb(197, 196, 196);
     margin-left: 5px;
     margin-top: 10px;
     text-align: center;
     font-size: 20px;
 }
+  
 .wordle-text{
     display: flex;
     justify-content: space-around;
@@ -27,4 +29,3 @@ body {
 .wordle-text p{
     font-size: 10px;
 }
-
