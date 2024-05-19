@@ -1,0 +1,25 @@
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.keyboard-row {
+    display: flex;
+    margin: 5px 0;
+}
+
+.keyboard-key {
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    margin: 0 5px;
+    padding: 20px 25px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.keyboard-key:active {
+    background-color: #999;
+}

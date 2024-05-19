@@ -1,31 +1,42 @@
 body {
-    background: rgb(22, 21, 21);
+    background: black;
 }
+
 .play {
     text-align: center;
     align-items: center;
-    margin-top: 150px;
-    height: 300px;
     background: #fff;
+    height: 750px;
+    margin-top: 100px;
+    border-radius: 5px;
+    padding: 20px;
+    padding-top: 35px;
 }
+
 .play-row-inputs input {
-    border: 2px solid darkgrey;
-    border-radius: 10px;
-    width: 40px;
-    height: 40px;
-    margin: 2px;
-    background: rgb(197, 196, 196);
-    margin-left: 5px;
-    margin-top: 10px;
+    width: 90px;
+    height: 90px;
+    border: 7px solid #908d8d;
+    border-radius: 12px;
+    margin: 10px;
+    margin-bottom: 12px;
+    font-size: 60px;
     text-align: center;
-    font-size: 20px;
+    background: #c9c7c7;
+    font-family: sans-serif;
+    font-weight: normal;
 }
-  
-.wordle-text{
+.wordle-text {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 20px;
 }
-.wordle-text p{
-    font-size: 10px;
+.wordle-text p {
+    font-size: 30px;
+    color: black;
+}
+#cube h1 {
+    color: beige;
+    font-size: 20px;
+    font-family: sans-serif;
 }
