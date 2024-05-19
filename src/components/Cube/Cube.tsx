@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import "../Cube/Cube.css"
+import React, { useState, useRef, useEffect, KeyboardEvent } from "react";
+import "../Cube/Cube.css";
 import Keyboard from "../Keyboard/Keyboard";
 
 interface BoardProps {
@@ -8,45 +8,21 @@ interface BoardProps {
 }
 
 const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
-    const [inputValuesOne, setInputValuesOne] = useState<string[]>(
-        Array(5).fill("")
-    );
-    const [inputValuesTwo, setInputValuesTwo] = useState<string[]>(
-        Array(5).fill("")
-    );
-    const [inputValuesThree, setInputValuesThree] = useState<string[]>(
-        Array(5).fill("")
-    );
-    const [inputValuesFour, setInputValuesFour] = useState<string[]>(
-        Array(5).fill("")
-    );
-    const [inputValuesFive, setInputValuesFive] = useState<string[]>(
-        Array(5).fill("")
-    );
-    const [inputColors, setInputColors] = useState<string[][]>(
-        Array(5).fill(Array(5).fill("white"))
-    );
-    const [invalidInputs, setInvalidInputs] = useState<{
-        [key: string]: boolean;
-    }>({});
+    const [inputValuesOne, setInputValuesOne] = useState<string[]>(Array(5).fill(""));
+    const [inputValuesTwo, setInputValuesTwo] = useState<string[]>(Array(5).fill(""));
+    const [inputValuesThree, setInputValuesThree] = useState<string[]>(Array(5).fill(""));
+    const [inputValuesFour, setInputValuesFour] = useState<string[]>(Array(5).fill(""));
+    const [inputValuesFive, setInputValuesFive] = useState<string[]>(Array(5).fill(""));
+    const [inputColors, setInputColors] = useState<string[][]>(Array(5).fill(Array(5).fill("white")));
+    const [invalidInputs, setInvalidInputs] = useState<{ [key: string]: boolean }>({});
     const [currentRow, setCurrentRow] = useState<number>(0);
     const [currentCol, setCurrentCol] = useState<number>(0);
 
-    const inputRefsOne = useRef<(HTMLInputElement | null)[]>(
-        Array(5).fill(null)
-    );
-    const inputRefsTwo = useRef<(HTMLInputElement | null)[]>(
-        Array(5).fill(null)
-    );
-    const inputRefsThree = useRef<(HTMLInputElement | null)[]>(
-        Array(5).fill(null)
-    );
-    const inputRefsFour = useRef<(HTMLInputElement | null)[]>(
-        Array(5).fill(null)
-    );
-    const inputRefsFive = useRef<(HTMLInputElement | null)[]>(
-        Array(5).fill(null)
-    );
+    const inputRefsOne = useRef<(HTMLInputElement | null)[]>(Array(5).fill(null));
+    const inputRefsTwo = useRef<(HTMLInputElement | null)[]>(Array(5).fill(null));
+    const inputRefsThree = useRef<(HTMLInputElement | null)[]>(Array(5).fill(null));
+    const inputRefsFour = useRef<(HTMLInputElement | null)[]>(Array(5).fill(null));
+    const inputRefsFive = useRef<(HTMLInputElement | null)[]>(Array(5).fill(null));
 
     const allInputValues = [
         inputValuesOne,
@@ -78,48 +54,84 @@ const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
 
         let anyCorrect = false;
 
-        allInputValues.forEach((inputValues, rowIndex) => {
-            let rowString = inputValues.join("");
-            let tileChars = tile.split("");
-            let inputColorsRow = Array(5).fill("white");
+        const currentValues = allInputValues[currentRow];
+        let rowString = currentValues.join("");
+        let tileChars = tile.split("");
+        let inputColorsRow = Array(5).fill("white");
 
-            inputValues.forEach((value, colIndex) => {
-                if (!value || value.trim() === "") {
-                    newInvalidInputs[`${rowIndex}-${colIndex}`] = true;
-                } else {
-                    if (value === tile[colIndex]) {
-                        inputColorsRow[colIndex] = "green";
-                        tileChars[colIndex] = "";
-                    }
+        currentValues.forEach((value, colIndex) => {
+            if (!value || value.trim() === "") {
+                newInvalidInputs[`${currentRow}-${colIndex}`] = true;
+            } else {
+                if (value === tile[colIndex]) {
+                    inputColorsRow[colIndex] = "green";
+                    tileChars[colIndex] = "";
                 }
-            });
-
-            inputValues.forEach((value, colIndex) => {
-                if (
-                    value &&
-                    value !== tile[colIndex] &&
-                    tileChars.includes(value)
-                ) {
-                    inputColorsRow[colIndex] = "yellow";
-                    tileChars[tileChars.indexOf(value)] = "";
-                }
-            });
-
-            newColors[rowIndex] = inputColorsRow;
-
-            if (rowString === tile) {
-                anyCorrect = true;
             }
         });
+
+        currentValues.forEach((value, colIndex) => {
+            if (value && value !== tile[colIndex] && tileChars.includes(value)) {
+                inputColorsRow[colIndex] = "yellow";
+                tileChars[tileChars.indexOf(value)] = "";
+            }
+        });
+
+        newColors[currentRow] = inputColorsRow;
+
+        if (rowString === tile) {
+            anyCorrect = true;
+        }
 
         setInvalidInputs(newInvalidInputs);
         setInputColors(newColors);
 
         if (anyCorrect) {
-            alert("You Won!");
+            alert("YOU WON!");
+        } else if (currentRow === 4 && !anyCorrect) {
+            alert(`YOU WON THE WORD THAT YOU DIDN'T FIND WAS: ${tile}`);
         } else {
-            alert("you lose");
+            setCurrentRow(currentRow + 1);
+            setCurrentCol(0);
         }
+    };
+
+    const handleKeyPress = (key: string) => {
+        const currentInputValues = allInputValues[currentRow];
+        const setCurrentInputValues = setInputValuesFunctions[currentRow];
+        const currentInputRefs = inputRefs[currentRow];
+
+        if (key === "BACKSPACE") {
+            if (currentCol > 0) {
+                const newValues = [...currentInputValues];
+                newValues[currentCol - 1] = "";
+                setCurrentInputValues(newValues);
+                setCurrentCol(currentCol - 1);
+                currentInputRefs.current[currentCol - 1]?.focus();
+            }
+        } else if (key === "ENTER") {
+            handleSave(); 
+        } else if (currentCol < 5) {
+            const newValues = [...currentInputValues];
+            newValues[currentCol] = key;
+            setCurrentInputValues(newValues);
+            setCurrentCol(currentCol + 1);
+
+            if (currentCol < 4) {
+                currentInputRefs.current[currentCol + 1]?.focus();
+            }
+        }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Backspace") {
+            handleKeyPress("BACKSPACE");
+        } else if (e.key === "Enter") {
+            handleKeyPress("ENTER");
+        } else if (e.key.length === 1) {
+            handleKeyPress(e.key);
+        }
+        e.preventDefault();
     };
 
     const handleChange = (
@@ -146,9 +158,7 @@ const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
             return newInputValues;
         });
 
-        const key = `${inputRefs.current?.indexOf(
-            inputRefs.current[index]
-        )}-${index}`;
+        const key = `${inputRefs.current?.indexOf(inputRefs.current[index])}-${index}`;
         setInvalidInputs((prev) => {
             const newInvalidInputs = { ...prev };
             delete newInvalidInputs[key];
@@ -156,83 +166,46 @@ const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
         });
     };
 
-    const handleKeyPress = (key: string) => {
-        const currentInputValues = allInputValues[currentRow];
-        const setCurrentInputValues = setInputValuesFunctions[currentRow];
-        const currentInputRefs = inputRefs[currentRow];
-
-        if (key === "BACKSPACE") {
-            const newValues = [...currentInputValues];
-            newValues[currentCol - 1] = "";
-            setCurrentInputValues(newValues);
-            setCurrentCol(Math.max(0, currentCol - 1));
-            if (currentInputRefs.current[currentCol - 1]) {
-                currentInputRefs.current[currentCol - 1]?.focus();
-            }
-        } else if (key === "ENTER") {
-            if (currentCol === 5) {
-                handleSave();
-                setCurrentRow((prev) => prev + 1);
-                setCurrentCol(0);
-            }
-        } else if (currentCol < 5) {
-            const newValues = [...currentInputValues];
-            newValues[currentCol] = key;
-            setCurrentInputValues(newValues);
-            setCurrentCol(currentCol + 1);
-            if (currentInputRefs.current[currentCol]) {
-                currentInputRefs.current[currentCol]?.focus();
-            }
-        
-        }
-    };
-  
     return (
         <div id="cube">
             <div className="container">
-                      <div className="play">
-                        <h1>{tile}</h1>
-                        <div className="play-row-inputs">
-                            {allInputValues.map((inputValues, rowIndex) => (
-                                <div key={`group-${rowIndex}`}>
-                                    {inputValues.map((value, colIndex) => {
-                                        const key = `${rowIndex}-${colIndex}`;
-                                        const backgroundColor =
-                                            inputColors[rowIndex][colIndex];
-
-                                        return (
-                                            <input
-                                                key={`input-${rowIndex}-${colIndex}`}
-                                                type="text"
-                                                value={value}
-                                                maxLength={1}
-                                                ref={(el) => {
-                                                    inputRefs[rowIndex].current[
-                                                        colIndex
-                                                    ] = el;
-                                                }}
-                                                onChange={(e) =>
-                                                    handleChange(
-                                                        colIndex,
-                                                        e.target.value,
-                                                        setInputValuesFunctions[
-                                                            rowIndex
-                                                        ],
-                                                        inputRefs[rowIndex]
-                                                    )
-                                                }
-                                                style={{ backgroundColor }}
-                                            />
-                                        );
-                                    })}
-                                </div>
-                            ))}
-                        </div>
+                <div className="play">
+                    <h1>{tile}</h1>
+                    <div className="play-row-inputs">
+                        {allInputValues.map((inputValues, rowIndex) => (
+                            <div key={`group-${rowIndex}`}>
+                                {inputValues.map((value, colIndex) => {
+                                    const backgroundColor = inputColors[rowIndex][colIndex];
+                                    return (
+                                        <input
+                                            key={`input-${rowIndex}-${colIndex}`}
+                                            type="text"
+                                            value={value}
+                                            maxLength={1}
+                                            ref={(el) => {
+                                                inputRefs[rowIndex].current[colIndex] = el;
+                                            }}
+                                            onKeyDown={handleKeyDown}
+                                            onChange={(e) =>
+                                                handleChange(
+                                                    colIndex,
+                                                    e.target.value,
+                                                    setInputValuesFunctions[rowIndex],
+                                                    inputRefs[rowIndex]
+                                                )
+                                            }
+                                            style={{ backgroundColor }}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ))}
+                    </div>
                     <div className="wordle-text">
                         <p>Wordle #195</p>
                         <p>12/31/2021</p>
                     </div>
-                    </div>
+                </div>
                 <Keyboard onKeyPress={handleKeyPress} />
                 <button
                     style={{
@@ -246,9 +219,8 @@ const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
                 >
                     Save
                 </button>
-                </div>
-. 
             </div>
+        </div>
     );
 };
 
