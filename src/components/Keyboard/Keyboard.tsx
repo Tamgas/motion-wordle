@@ -1,4 +1,3 @@
-import React from "react";
 import "../Keyboard/Keyboard.css";
 
 interface KeyboardProps {
@@ -11,7 +10,6 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
         ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
         ["Z", "X", "C", "V", "B", "N", "M"],
     ];
-    
 
     return (
         <div className="keyboard">
@@ -41,6 +39,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
                 >
                     ENTER
                 </button>
+                
             </div>
         </div>
     );

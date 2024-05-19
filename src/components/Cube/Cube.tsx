@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, KeyboardEvent } from "react";
+import React, { useState, useRef, KeyboardEvent } from "react";
 import "../Cube/Cube.css";
 import Keyboard from "../Keyboard/Keyboard";
 
@@ -8,12 +8,15 @@ interface BoardProps {
 }
 
 const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
-    const [inputValuesOne, setInputValuesOne] = useState<string[]>(Array(5).fill(""));
-    const [inputValuesTwo, setInputValuesTwo] = useState<string[]>(Array(5).fill(""));
-    const [inputValuesThree, setInputValuesThree] = useState<string[]>(Array(5).fill(""));
-    const [inputValuesFour, setInputValuesFour] = useState<string[]>(Array(5).fill(""));
-    const [inputValuesFive, setInputValuesFive] = useState<string[]>(Array(5).fill(""));
-    const [inputColors, setInputColors] = useState<string[][]>(Array(5).fill(Array(5).fill("white")));
+    const initialInputValues = Array(5).fill("");
+    const initialColors = Array(5).fill(Array(5).fill("white"));
+
+    const [inputValuesOne, setInputValuesOne] = useState<string[]>([...initialInputValues]);
+    const [inputValuesTwo, setInputValuesTwo] = useState<string[]>([...initialInputValues]);
+    const [inputValuesThree, setInputValuesThree] = useState<string[]>([...initialInputValues]);
+    const [inputValuesFour, setInputValuesFour] = useState<string[]>([...initialInputValues]);
+    const [inputValuesFive, setInputValuesFive] = useState<string[]>([...initialInputValues]);
+    const [inputColors, setInputColors] = useState<string[][]>([...initialColors]);
     const [invalidInputs, setInvalidInputs] = useState<{ [key: string]: boolean }>({});
     const [currentRow, setCurrentRow] = useState<number>(0);
     const [currentCol, setCurrentCol] = useState<number>(0);
@@ -166,7 +169,33 @@ const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
         });
     };
 
+    const clearInputs = () => {
+        setInputValuesOne([...initialInputValues]);
+        setInputValuesTwo([...initialInputValues]);
+        setInputValuesThree([...initialInputValues]);
+        setInputValuesFour([...initialInputValues]);
+        setInputValuesFive([...initialInputValues]);
+        setInputColors([...initialColors]);
+        setCurrentRow(0);
+        setCurrentCol(0);
+        setInvalidInputs({});
+    };
+
     return (
+        <>
+           <button
+                    style={{
+                        padding: "18px 40px",
+                        borderRadius: "15px",
+                        marginLeft: "1350px",
+                        display: "flex",
+                        marginTop: "20px",
+                        background: "red"
+                    }}
+                    onClick={clearInputs}
+                >
+                    RESTART
+                </button>
         <div id="cube">
             <div className="container">
                 <div className="play">
@@ -206,7 +235,9 @@ const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
                         <p>12/31/2021</p>
                     </div>
                 </div>
+                
                 <Keyboard onKeyPress={handleKeyPress} />
+
                 <button
                     style={{
                         padding: "18px 40px",
@@ -214,6 +245,7 @@ const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
                         marginLeft: "590px",
                         display: "flex",
                         marginTop: "20px",
+                        background: "green"
                     }}
                     onClick={handleSave}
                 >
@@ -221,6 +253,8 @@ const Cube: React.FC<BoardProps> = ({ tile, loading }) => {
                 </button>
             </div>
         </div>
+        
+        </>
     );
 };
 
