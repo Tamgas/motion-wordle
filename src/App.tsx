@@ -8,7 +8,7 @@ export default function App() {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const fetchRandomWord = async () => {
+        const fetchRandomWord = async () => { 
             setLoading(true);
 
             try {
