@@ -1,0 +1,44 @@
+body {
+    background: rgb(237, 233, 233);
+}
+.container {
+    max-width: 555px;
+    margin: 0 auto;
+}
+.block {
+    width: 510px;
+    text-align: center;
+    align-items: center;
+    background: #fff;
+    height: 550px;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding-left: 38px;
+    padding-top: 35px;
+}
+.block__content {
+    display: flex;
+}
+.block__content__inputs input {
+    width: 60px;
+    height: 60px;
+    border: 4px solid #908d8d;
+    border-radius: 12px;
+    margin: 10px;
+    margin-bottom: 12px;
+    font-size: 30px;
+    text-align: center;
+    background: #c9c7c7;
+    font-family: sans-serif;
+    font-weight: normal;
+}
+.wordle__text {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 65px;
+    padding-left: 12px;
+}
+.wordle__text p {
+    font-size: 20px;
+    color: black;
+}
