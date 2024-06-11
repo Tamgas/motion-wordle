@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import Cube from "./components/Cube/Cube";
 
-
 export default function App() {
     const [tile, setTile] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const fetchRandomWord = async () => { 
+        const fetchRandomWord = async () => {
             setLoading(true);
 
             try {

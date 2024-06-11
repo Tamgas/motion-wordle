@@ -7,7 +7,32 @@
 
 .keyboard-row {
     display: flex;
-    margin: 5px 0;
+    margin: 5px 0;.keyboard {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+    
+    .keyboard-row {
+        display: flex;
+        margin: 5px 0;
+    }
+    
+    .keyboard-key {
+        background-color: #ccc;
+        border: none;
+        border-radius: 5px;
+        padding-left: 0;
+        margin: 0 4px;
+        padding: 13px 18px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    
+    .keyboard-key:active {
+        background-color: #999;
+    }
 }
 
 .keyboard-key {
